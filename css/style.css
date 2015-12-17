@@ -1,0 +1,18 @@
+.plots-container {
+  display: flex;
+  flex-flow: row wrap;
+}
+.graph-container {
+  width: 45vw;
+}
+.graph-title {
+  text-decoration: underline;
+}
+
+input[type=number] {
+  width: 5ex;
+}
+
+.mg-active-datapoint {
+  transform: translateY(2em);
+}
