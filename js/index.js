@@ -597,23 +597,14 @@ window.addEventListener('load', () => {
     versionEl.dispatchEvent(new Event('change'));
   }
 
-  const BATCH_SIZE = 4;
-  const BATCH_TIMEOUT = 2000;
   function plot() {
     removeAllChildren(plotsEl);
-    var p = Promise.resolve();
-    for (var i = 0; i < plots.length; i += BATCH_SIZE) {
-      p = p.then(((batch) => Promise.race([
-        new Promise(resolve => setTimeout(resolve, BATCH_TIMEOUT)),
-        Promise.all(batch
-          .map(plot => {
-            plot.channel = channelEl.selectedOptions[0].value;
-            plot.version = versionEl.selectedOptions[0].value;
-            plot.evoVersions = plot.evoVersions ? evoVersionsEl.value : 0;
-            return TelemetryWrapper.go(plot, plotsEl);
-          }))
-      ])).bind(undefined, plots.slice(i, i + BATCH_SIZE)));
-    }
+    plots.forEach(plot => {
+      plot.channel = channelEl.selectedOptions[0].value;
+      plot.version = versionEl.selectedOptions[0].value;
+      plot.evoVersions = plot.evoVersions ? evoVersionsEl.value : 0;
+      TelemetryWrapper.go(plot, plotsEl)
+    });
   }
 
   function createOption(parentEl, value, text = value, selected = false) {
