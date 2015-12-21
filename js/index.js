@@ -598,6 +598,7 @@ window.addEventListener('load', () => {
     Object.keys(_versions).forEach(channel =>
       createOption(channelEl, channel, channel, channel == 'nightly'));
     updateVersions();
+    rebuildPlotGroupEls();
 
     channelEl.addEventListener('change', updateVersions);
     versionEl.addEventListener('change', plot);
@@ -649,8 +650,9 @@ window.addEventListener('load', () => {
   }
 
   function plot() {
-    removeAllChildren(plotsEl);
-    rebuildPlotGroupEls();
+    Array.prototype.forEach.call(
+      document.getElementsByClassName('plot-group-plots'),
+      plotGroupPlotsEl => removeAllChildren(plotGroupPlotsEl));
     plots.forEach(plot => {
       plot.channel = channelEl.selectedOptions[0].value;
       plot.version = versionEl.selectedOptions[0].value;
