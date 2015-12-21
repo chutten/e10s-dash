@@ -560,6 +560,20 @@ var plots = [
     "evoVersions": "3"
   },
 ];
+
+const PLOT_GROUP_IDS = [
+  'FX_TAB_SWITCH_',
+  'SIMPLE_MEASURES_',
+  'FX_TAB_ANIM_',
+  'FX_REFRESH_DRIVER_',
+  'EVENTLOOP_UI_ACTIVITY_EXP_MS',
+  'SUBPROCESS_ABNORMAL_ABORT',
+  'FX_PAGE_LOAD_MS',
+  'SLOW_SCRIPT_NOTICE_COUNT',
+  'FX_NEW_WINDOW_MS',
+  'GC_',
+  'CYCLE_',
+];
 window.addEventListener('load', () => {
   var _versions = {};
   var channelEl = document.querySelector('#channel');
@@ -597,13 +611,43 @@ window.addEventListener('load', () => {
     versionEl.dispatchEvent(new Event('change'));
   }
 
+  function rebuildPlotGroupEls() {
+    PLOT_GROUP_IDS.forEach(plotGroupId => {
+      var plotGroupEl = document.createElement('div');
+      plotGroupEl.className = 'plot-group';
+      var plotGroupTitle = document.createElement('h3');
+      plotGroupTitle.className = 'plot-group-title';
+      if (plotGroupId.endsWith('_')) {
+        plotGroupTitle.textContent = plotGroupId + '*';
+      } else {
+        plotGroupTitle.textContent = plotGroupId;
+      }
+      var plotGroupPlotsEl = document.createElement('div');
+      plotGroupPlotsEl.className = 'plot-group-plots';
+      plotGroupPlotsEl.id = plotGroupId;
+      plotGroupEl.appendChild(plotGroupTitle);
+      plotGroupEl.appendChild(plotGroupPlotsEl);
+      plotsEl.appendChild(plotGroupEl);
+    });
+  }
+
+  function getPlotGroupEl(plot) {
+    var plotGroupId = PLOT_GROUP_IDS.find(plotGroupId =>
+      plot.metric.startsWith(plotGroupId));
+    if (!plotGroupId) {
+      return plotsEl;
+    }
+    return document.getElementById(plotGroupId);
+  }
+
   function plot() {
     removeAllChildren(plotsEl);
+    rebuildPlotGroupEls();
     plots.forEach(plot => {
       plot.channel = channelEl.selectedOptions[0].value;
       plot.version = versionEl.selectedOptions[0].value;
       plot.evoVersions = plot.evoVersions ? evoVersionsEl.value : 0;
-      TelemetryWrapper.go(plot, plotsEl)
+      TelemetryWrapper.go(plot, getPlotGroupEl(plot));
     });
   }
 
