@@ -580,6 +580,7 @@ window.addEventListener('load', () => {
   var versionEl = document.querySelector('#version');
   var evoVersionsEl = document.querySelector('#evo-versions');
   var plotsEl = document.querySelector('.plots-container');
+  var submissionDateEl = document.querySelector('#submission-date');
 
   Telemetry.init(() => {
     Telemetry.getVersions()
@@ -601,6 +602,7 @@ window.addEventListener('load', () => {
     channelEl.addEventListener('change', updateVersions);
     versionEl.addEventListener('change', plot);
     evoVersionsEl.addEventListener('change', plot);
+    submissionDateEl.addEventListener('change', plot);
     plot();
   });
 
@@ -653,6 +655,7 @@ window.addEventListener('load', () => {
       plot.channel = channelEl.selectedOptions[0].value;
       plot.version = versionEl.selectedOptions[0].value;
       plot.evoVersions = plot.evoVersions ? evoVersionsEl.value : 0;
+      plot.useSubmissionDate = submissionDateEl.checked;
       TelemetryWrapper.go(plot, getPlotGroupEl(plot));
     });
   }
