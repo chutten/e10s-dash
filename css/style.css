@@ -14,22 +14,31 @@ html, body {
   border-style: solid;
   border-color: steelblue;
   border-radius: 6px;
+  overflow: hidden;
+}
+
+.plot-toggle {
+  display: none;
+}
+
+.plot-toggle:checked ~ .plot-group-plots {
+  height: auto;
 }
 
 .plot-group-plots {
   display: flex;
   flex-flow: row wrap;
-  overflow: hidden;
+  height: 0;
 }
 
 .plot-group-title {
+  display: block;
   flex: 0 1 100%;
   margin: 0;
   padding: 8px;
   font-size: 19px;
   font-weight: bold;
   background-color: #F0F0F0;
-  border-radius: 6px 6px 0 0;
 }
 
 .graph-container {

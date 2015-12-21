@@ -615,17 +615,23 @@ window.addEventListener('load', () => {
     PLOT_GROUP_IDS.forEach(plotGroupId => {
       var plotGroupEl = document.createElement('div');
       plotGroupEl.className = 'plot-group';
-      var plotGroupTitle = document.createElement('h3');
+      var plotGroupTitle = document.createElement('label');
       plotGroupTitle.className = 'plot-group-title';
       if (plotGroupId.endsWith('_')) {
         plotGroupTitle.textContent = plotGroupId + '*';
       } else {
         plotGroupTitle.textContent = plotGroupId;
       }
+      var plotToggleEl = document.createElement('input');
+      plotToggleEl.setAttribute('type', 'checkbox');
+      plotToggleEl.className = 'plot-toggle';
+      plotToggleEl.id = 'toggle-' + plotGroupId;
+      plotGroupTitle.setAttribute('for', plotToggleEl.id);
       var plotGroupPlotsEl = document.createElement('div');
       plotGroupPlotsEl.className = 'plot-group-plots';
       plotGroupPlotsEl.id = plotGroupId;
       plotGroupEl.appendChild(plotGroupTitle);
+      plotGroupEl.appendChild(plotToggleEl);
       plotGroupEl.appendChild(plotGroupPlotsEl);
       plotsEl.appendChild(plotGroupEl);
     });
